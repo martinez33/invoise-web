@@ -21,12 +21,12 @@ fetch('../invoice') //fait un GET sur  l'url "/invoice"
             tr.appendChild(td);
 
             td = document.createElement("td");
-            text = document.createTextNode(`${invoice.customerName}`);
+            text = document.createTextNode(`${invoice.customer.name}`);
             td.appendChild(text);
             tr.appendChild(td);
 
             td = document.createElement("td");
-            //Bouton clicable pour avoir le détailsde la facture
+            //Bouton clicable pour avoir le détails de la facture
             var button = document.createElement("button");
             button.setAttribute("type","button");
             button.onclick = function() {
@@ -56,7 +56,8 @@ function showDetail(invoiceNumber){
         invoiceDetailNode.appendChild(p);
 
         p = document.createElement("p");
-        text = document.createTextNode(`Customer name: ${res.customerName}`);
+        console.log(res);
+        text = document.createTextNode(`Customer name: ${res.customer.name}`);
         p.appendChild(text);
         invoiceDetailNode.appendChild(p);
 

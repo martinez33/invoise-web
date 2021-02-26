@@ -1,6 +1,7 @@
 package com.mycompany.invoise.invoiseweb.controller;
 
-import com.mycompany.invoise.core.controller.InvoiceControllerInterface;
+import com.mycompany.invoise.core.entity.Address;
+import com.mycompany.invoise.core.entity.Customer;
 import com.mycompany.invoise.core.entity.Invoice;
 import com.mycompany.invoise.core.service.InvoiceServiceInterface;
 import com.mycompany.invoise.invoiseweb.form.InvoiceForm;
@@ -9,10 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/invoice")
@@ -35,7 +34,16 @@ public class InvoiceWebController {
             return "invoice-create-form";
         }
         Invoice invoice = new Invoice();
-        invoice.setCustomerName(invoiceForm.getCustomerName());
+        Customer customer = new Customer(invoiceForm.getCustomerName());
+        invoice.setCustomer(customer);
+        Address address = new Address(
+                invoiceForm.getStreetName(),
+                invoiceForm.getStreetNumber(),
+                invoiceForm.getCity(),
+                invoiceForm.getZipCode(),
+                invoiceForm.getCountry()
+        );
+        customer.setAddress(address);
         invoice.setOrderNumber(invoiceForm.getOrderNumber());
         invoiceServiceInterface.createInvoice(invoice);
         return "invoice-created";
@@ -44,7 +52,7 @@ public class InvoiceWebController {
     @GetMapping("/home")
     public String displayHome(Model model){
         System.out.println("La méthode displayHome a été invoquée");
-        model.addAttribute("invoices", invoiceServiceInterface.getInvoiceList());
+        //model.addAttribute("invoices", invoiceServiceInterface.getInvoiceList());
         return "invoice-home";
     }
 
